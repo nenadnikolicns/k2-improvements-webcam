@@ -1,0 +1,9 @@
+streams:
+  c270:
+    - exec:sh -c "until [ -e /dev/video2 ]; do sleep 1; done && ffmpeg -hide_banner -loglevel error -f v4l2 -input_format mjpeg -framerate 25 -i /dev/video2 -c:v copy -f mpjpeg pipe:1"#video=mjpeg
+
+on_demand: false
+
+api:
+  listen: :1984
+  origin: "*"
