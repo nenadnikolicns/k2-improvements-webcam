@@ -13,24 +13,29 @@ In the `features` folder you will find install scripts for each of the features 
 Use at your own risk, I'm not responsible for fires or broken dreams.  But you do get to keep both halves if something breaks.
 
 
-## Install procedure
-
-Reset your printer and stop at the calibration prompt, you can do this later, copy the files to the /mnt/UDISK/printer_data folder(using WinSCP or scp command) and give execute permissions to the k2-base-install.sh script, everything after this is automated.
-
-1. The script will install entware tools necessary to accomplish the installs, first run will also check if the better-root structure is made and if not will make it after which a disconnect will follow.
-2. The second execution of the script will then install all the resources needed for the cam fix (Moonraker, Fluidd and better-init).
-3. If another camera is connected it will install the necessary components so that it also will be detected by Fluidd, if not it will skip the process.
-
 Additionally, root is enabled by default with the password: 'creality_2024'.
 
-It is recommend to perform a factory reset prior to install to avoid potential conflicts with previous modifications.  A factory reset can be achieved with the following command in a terminal on the K2:
+It is recommend to perform a factory reset prior to install to avoid potential conflicts with previous modifications.  
+A factory reset can be achieved with the following command in a terminal on the K2:
 
 ```raw
 echo "all" | /usr/bin/nc -U /var/run/wipe.sock
 ```
 
+
+## Install procedure - Need to run the script TWICE
+
+Reset your printer and stop at the calibration prompt(you can do this later - save some time), copy the files to the /mnt/UDISK/printer_data folder(using WinSCP or scp command) and give execute permissions to the k2-base-install.sh script, everything after this is automated.
+
+1. The script will install entware tools necessary to accomplish the installs, first run will also check if the better-root structure is made and if not will make it after which a disconnect will follow.
+2. The second execution of the script will then install all the resources needed for the cam fix (Moonraker, Fluidd and better-init).
+3. If another camera is connected it will install the necessary components so that it also will be detected by Fluidd, if not it will skip the process.
+
+
 ## Chamber Camera (webcam-fix)
-The stock chamber camera is set to 15fps by default. `v4l2-ctl --list-formats-ext -d /dev/v4l/by-id/main-video0` reports 30fps as available. This fork sets it to 25fps — good enough and not pushing the limit.
+The stock chamber camera is set to 15fps by default. `v4l2-ctl --list-formats-ext -d /dev/v4l/by-id/main-video0` reports 30fps as available. 
+This fork sets it to 25fps — good enough for me and this way we are not pushing the limit if for any reason the cam cant handle it properly.
+
 
 ## Features
 
