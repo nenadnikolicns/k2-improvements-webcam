@@ -1,23 +1,27 @@
 # K2 Plus Improvements Script Maintainers Fork
 
-JaminCollins has archived his repo, I have the cartographer as well as use the k2-improvements script on my K2 Plus alongside an internal USB Hub and a custom Camera addition.
+CampbellFab has archived his repo, I'm not using the cartographer and thereby will the logic for it be omitted for now. The main functionality will be upstream Moonraker and Fluidd which support webcam in the UI interface as well as use of the k2-improvements for better init/root functionalities.
 
-Most of the underlying features such as fluidd, moonraker, and cartographer3d-plugin, are being maintaned and updated by [Jacob10383](https://github.com/Jacob10383)
-* This Fork implements other minor features such as webcam modifications, and nozzle-camera additions.
+Most of the underlying features such as Fluidd and Moonraker are being maintained and updated by [Jacob10383](https://github.com/Jacob10383)
+* This Fork implements other features such as stock webcam improvements and optional USB webcam support(I'm using Logi C270).
 
 In the `features` folder you will find install scripts for each of the features being installed, if desired to run separately.
+
 
 ## DISCLAIMER
 
 Use at your own risk, I'm not responsible for fires or broken dreams.  But you do get to keep both halves if something breaks.
 
-## Warning
 
-As a _heads up_ these improvements are not compatible with Creality's _auto-calibration_.  In our experience we get better results through manual tuning.
+## Install procedure
 
-## Start Here at Bootstrap
+Reset your printer and stop at the calibration prompt, you can do this later, copy the files to the /mnt/UDISK/printer_data folder(using WinSCP or scp command) and give execute permissions to the k2-base-install.sh script, everything after this is automated.
 
-The Bootstrap is a requirement for the improvements to install properly, so this must be accomplished first. Of note, it will install entware tools necessary to accomplish the installs. Additionally, root is enabled by default with the password: 'creality_2024'. At some point, we recommend running command 'passwd' in the terminal to change the default password to something secure.
+1. The script will install entware tools necessary to accomplish the installs, first run will also check if the better-root structure is made and if not will make it after which a disconnect will follow.
+2. The second execution of the script will then install all the resources needed for the cam fix (Moonraker, Fluidd and better-init).
+3. If another camera is connected it will install the necessary components so that it also will be detected by Fluidd, if not it will skip the process.
+
+Additionally, root is enabled by default with the password: 'creality_2024'.
 
 It is recommend to perform a factory reset prior to install to avoid potential conflicts with previous modifications.  A factory reset can be achieved with the following command in a terminal on the K2:
 
@@ -25,76 +29,28 @@ It is recommend to perform a factory reset prior to install to avoid potential c
 echo "all" | /usr/bin/nc -U /var/run/wipe.sock
 ```
 
-1. Enable root access on the K2 Plus by going to Settings, General tab and root on the physical screen. Take note of the password.
-1. Download the latest bootstrap release from [https://github.com/campbellfabrications/k2-improvements/releases](https://github.com/campbellfabrications/k2-improvements/releases) and extract the folder.
-1. To install the bootstrap, connect to your K2 Plus's Fluid interface via browser **http://PrinterIP:4408**
-1. Unzip the downloaded bootstrap folder and upload the extracted bootstrap folder by going to Configuration **{...}**, **+**, **Upload Folder**, and selecting the extracted bootstrap folder.
-    ![image](https://github.com/user-attachments/assets/3d242efc-4cf8-412d-b4b0-59507720f5ad)
-1. SSH to the K2 Plus using any terminal tool (e.g. PuTTy) using the printers ip adress, port 22, user "root" and the password noted in step 1.
-1. If you execute a wipe, you will need to go through setup on the K2 screen and complete all the way through creality cloud connection. This will give you the wifi/network connection that you will need and connect appropriately to creality cloud. Stop at the calibration, you can do this later.
-1. To start the boostrap install: paste into the terminal `sh /mnt/UDISK/printer_data/config/bootstrap/bootstrap.sh` and hit enter.
-1. Once the setup completes, it will log you out of your terminal and you will need to log back in.
-
-## Installers
-
-* Option 1: `gimme-the-jamin.sh` - Used to install cartographer features **NOTE MUST HAVE CARTO FLASHED AND PLUGGED IN AND READY TO GO** by following instructions [here](https://github.com/campbellfabrications/k2-improvements/blob/main/features/cartographer/firmware/README.md) first.
-
-    To run, use the terminal command `sh /mnt/UDISK/root/k2-improvements/gimme-the-jamin.sh`
-
-    After install you will need to calibrate the carto by following instructions [here](https://github.com/campbellfabrications/k2-improvements/blob/main/features/cartographer/SETUP.md)
-
-* Option 2: `no-carto.sh` - Use this if you aren't going to use a carto, or don't have your carto yet.
-
-    To run, use the terminal command `sh /mnt/UDISK/root/k2-improvements/no-carto.sh`
-
-They both install the same set of features (those that I use).  The only difference is whether or not the cartographer bits are installed. If you start with no-carto.sh and later get a carto, you can then run the gimme-the-jamin.sh script and it will install all of the necessary carto items appropriately.
-
-You are still welcome to hand pick which features you want to install.
-
-# Latest Added Features:
-
-## Cartographer V4 Support
-Replaced the Cartographer Feature Folder with [Jacob10383's](https://github.com/Jacob10383) commit enabling [Cartographer V4](https://github.com/Jacob10383/k2-improvements/commit/a6698912233346fe593b7ae30bd22693854f9cac) support.
-Installs the new [Cartographer3D-plugin](https://github.com/CampbellFabrications/cartographer3d-plugin) as a fork of [Jacob10383](https://github.com/Cartographer3D/cartographer3d-plugin/commit/ddcb2537826fac11b9130bc4011ed16e25627d46)'s work on enabling k2 compatability. that replaces the previous deprecated 'cartographer-klipper'.
-
-## Webcam-FPS 17-10-25
-The stock chamber camera is set to 15fps. `v4l2-ctl --list-formats-ext -d /dev/v4l/by-id/main-video0` reports 30fps as available. Lets get that framerate.
-
-## Non-Critical Cartographer MCU
-Allows `[mcu cartographer]` within Cartographer.cfg to be defined as optional with the following flag: `is_non_critical`.
-
-Massive Thanks to [Jacob10383](https://github.com/Jacob10383) for [This](https://github.com/Jacob10383/Printer/commit/670d405f1a6d40760fe4e9c74c87a0100c1135a4#diff-45f5ce587b170586644c8277b076bd26669b8262c464575c9e20f15f665acead) commit.
-
-Set this value to `is_non_critical: true` to allow disconnects without the printer stopping.
-
+## Chamber Camera (webcam-fix)
+The stock chamber camera is set to 15fps by default. `v4l2-ctl --list-formats-ext -d /dev/v4l/by-id/main-video0` reports 30fps as available. This fork sets it to 25fps — good enough and not pushing the limit.
 
 ## Features
 
-* [axis_twist_compensation](./features/axis_twist_compensation/README.md)
-* [better init](./features/better-init/README.md)
-* [better root](./features/better-root/README.md) home directory
-* [Cartographer](./features/cartographer/README.md) support
-* installs [Entware](https://github.com/Entware/Entware)
-* updated [Fluidd](./features/fluidd/README.md)
-* updated [Moonraker](./features/moonraker/README.md)
-* [Obico](./features/obico/README.md) - _WIP_
-* implements [SCREWS_TILT_CALCULATE](https://www.klipper3d.org/Manual_Level.html#adjusting-bed-leveling-screws-using-the-bed-probe)
+* [better-init](./features/better-init/README.md) — replaces factory init scripts, enables Fluidd service control
+* [better-root](./features/better-root/README.md) — moves root home directory to UDISK (required for Moonraker install)
+* [Entware](https://github.com/Entware/Entware) — package manager prerequisite
+* updated [Fluidd](./features/fluidd/README.md) — web UI
+* updated [Moonraker](./features/moonraker/README.md) — API layer
+* skip-oem-setup — disables OEM setup wizard on boot
+* [webcam-fix](./features/webcam-fix/) — sets chamber camera to 720p/25fps
+* [webcam-usb](./features/webcam-usb/) — optional USB webcam support via go2rtc (auto-detected on `/dev/video2`)
+  * go2rtc runs on port `1984`, stream available at `http://PRINTER_IP:1984`
+  * After install, update `PRINTER_IP` in `features/webcam-usb/moonraker-webcam.cfg` with your printer's IP address
 
-And a few quality of life improvement macros
-
-* [MESH_IF_NEEDED](./features/macros/bed_mesh/README.md)
-* [START_PRINT](./features/macros/start_print/README.md)
-* [M191](./features/macros/m191/README.md)
-
-### Bed Leveling
-
-Sadly, many of the K2 beds resemble a taco or valley.  In the [bed_leveling](bed_leveling) folder you will find a python based script and short writeup on how to apply aluminium tape to shim the bed.
 
 ## Credits
 
-
-* [@jamincollins](https://github.com/jamincollins) - The Guy who made this project to begin with
-* [@Jacob10383](https://github.com/Jacob10383/) - KAMP, Resonance Sweeping changes for `shaper_calibrate`, slowly merging his fork and standalone Printer repo into this repo.
+* [@CampbellFabrications](https://github.com/CampbellFabrications/k2-improvements) - Direct upstream fork this repo is based on
+* [@jamincollins](https://github.com/jamincollins) - The Guy who made the original k2-improvements project
+* [@Jacob10383](https://github.com/Jacob10383/) - Maintaining upstream Fluidd/Moonraker updates and resonance sweeping changes
 * [@Guilouz](https://github.com/Guilouz) - standing on the shoulders of giants
 * [@stranula](https://github.com/stranula)
 * [@juliosueiras](https://github.com/juliosueiras)
@@ -104,9 +60,9 @@ Sadly, many of the K2 beds resemble a taco or valley.  In the [bed_leveling](bed
 * Fluidd - [https://github.com/fluidd-core/fluidd](https://github.com/fluidd-core/fluidd)
 * Entware - [https://github.com/Entware/Entware](https://github.com/Entware/Entware)
 * Obico - [https://www.obico.io/](https://www.obico.io/)
-* SimplyPrint - [https://simplyprint.io/](https://simplyprint.io/)
 * KAMP - [https://github.com/kyleisah](https://github.com/kyleisah/Klipper-Adaptive-Meshing-Purging)
 * GuppyScreen - [https://github.com/foo](https://github.com/foo/guppyscreen)
+* go2rtc - [https://github.com/AlexxIT/go2rtc](https://github.com/AlexxIT/go2rtc)
 
 ## FAQ
 
