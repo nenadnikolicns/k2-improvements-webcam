@@ -43,7 +43,7 @@ ln -sf ~/fluidd /usr/share/fluidd
 # register for updates
 mkdir -p ~/printer_data/config/updates
 cp ${SCRIPT_DIR}/update-manager.cfg ~/printer_data/config/updates/fluidd.cfg
-python3 ~/k2-improvements/scripts/moonraker_include.py updates/fluidd.cfg
+python3 ${SCRIPT_DIR}/../../scripts/moonraker_include.py updates/fluidd.cfg
 
 # TODO: should this should be gated on a port check?
 # wait for everything to be ready

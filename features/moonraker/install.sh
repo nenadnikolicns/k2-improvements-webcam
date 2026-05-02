@@ -88,7 +88,9 @@ install_libs() {
 
 replace_moonraker() {
     progress "Stopping legacy mooonraker ..."
-    /etc/init.d/moonraker stop
+    chmod +x /etc/init.d/moonraker 2>/dev/null || true
+    /etc/init.d/moonraker stop 2>/dev/null || true
+    sleep 3
 
     progress "Replacing legacy mooonraker with mainline ..."
 
@@ -107,6 +109,7 @@ replace_moonraker() {
 modify_moonraker_asvc() {
     progress "Modifying moonraker.asvc ..."
     MOONRAKER_ASVC=/mnt/UDISK/printer_data/moonraker.asvc
+    touch ${MOONRAKER_ASVC}
     for SERVICE in webrtc cartographer klipper; do
         if ! grep -qE "${SERVICE}" ${MOONRAKER_ASVC}; then
             echo "${SERVICE}" >> ${MOONRAKER_ASVC}

@@ -12,10 +12,10 @@ VERSION_FILE=/mnt/UDISK/creality/userdata/config/cam_version.json
 FW_ROOT_DIR=/usr/share/uvc/fw
 
 MAIN_CAM=0
-MAIN_PIC_WIDTH=1920
-MAIN_PIC_HEIGHT=1080
-# Here's the magic line that sets the webcam FPS to 30 instead of 15, which should fix the choppy webcam issue on the K2
-MAIN_PIC_FPS=30
+MAIN_PIC_WIDTH=1280
+MAIN_PIC_HEIGHT=720
+# Here's the magic line that sets the webcam FPS to 25 instead of 15, which should fix the choppy webcam issue on the K2
+MAIN_PIC_FPS=25
 
 MODEL=$(/usr/bin/get_sn_mac.sh model)
 
